@@ -5,10 +5,10 @@
 
         <form @submit.prevent="addArticle()"  class="mb-2">
             <div class="form-group">
-                <input class="form-control" name="name" placeholder="Name.." type="text" v-model="article.name">
+                <input class="form-control" placeholder="Name.." type="text" v-model="article.name">
             </div>
             <div class="form-group">
-                <textarea class="form-control" name="description" placeholder="Description.." v-model="article.description"></textarea>
+                <textarea class="form-control" placeholder="Description.." v-model="article.description"></textarea>
             </div>
             <button type="submit" class="btn btn-light btn-block">Submit</button>
         </form>

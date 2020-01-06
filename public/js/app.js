@@ -1880,6 +1880,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -37405,7 +37407,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { name: "name", placeholder: "Name..", type: "text" },
+              attrs: { placeholder: "Name..", type: "text" },
               domProps: { value: _vm.article.name },
               on: {
                 input: function($event) {
@@ -37429,7 +37431,7 @@ var render = function() {
                 }
               ],
               staticClass: "form-control",
-              attrs: { name: "description", placeholder: "Description.." },
+              attrs: { placeholder: "Description.." },
               domProps: { value: _vm.article.description },
               on: {
                 input: function($event) {
