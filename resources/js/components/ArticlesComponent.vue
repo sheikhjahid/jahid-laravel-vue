@@ -9,10 +9,15 @@
             <div class="form-group">
                 <textarea class="form-control" placeholder="Description.." v-model="article.description"></textarea>
             </div>
-            <div class="form-group">
-                <img src="'storage/'+article.image" width="200" height="200">
-                <input type="file" class="form-control" name="image">
+            
+            <div v-if="!article.image" class="form-group">
+                <input type="file" v-on:change="onImageChange">
             </div>
+             <div v-else class="form-group">
+                <img :src="'storage/'+article.image" />
+                <button @click="removeImage">Remove image</button>
+            </div>
+            
             <button type="submit" class="btn btn-light btn-block">Submit</button>
         </form>
 
@@ -60,8 +65,7 @@ export default{
         }
     },
     data(){
-       return {
-        //    articles:[],
+        return {
            article:{
                 id:'',
                 name:'',
@@ -69,16 +73,31 @@ export default{
                 image:''
             },
             edit:false
-       }
+        }
     },
-    // created(){
-    //     this.fetchArticles();
-    // },
     methods: {
-        // fetchArticles()
-        // {
-        //     axios.get('articles');
-        // },
+        onImageChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                alert(files);
+                if (!files.length)
+                    return;
+                console.log(files[0]);
+                this.createImage(files[0]);
+            },
+        createImage(file) {
+            let reader = new FileReader();
+
+            let vm = this.article;
+            
+            reader.onload = (e) => {
+                vm.image = file.name;
+            };
+            
+            reader.readAsDataURL(file);
+        },
+        removeImage(e) {
+            this.article.image ='';
+        },
         deleteArticle(id)
         {
             if(confirm('Are you sure you want to delete?'))
@@ -149,7 +168,7 @@ export default{
     },
 
     mounted() {
-        
+        // console.log(this.articles);
     }
 }
 

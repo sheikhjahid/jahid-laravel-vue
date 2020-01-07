@@ -36,15 +36,13 @@ class ArticleController extends Controller
                 'messages' => $validator->errors()
             ]);
         }
-
-        return $request->all();
-        
-        if($request->file('image'))
+        if($request->image)
         {
-            $file = $request->file('image');
+            $file = $request->image;
 
             $request->image = $file->store('images');
         }
+        // return $request->image;
         $create = $this->article->create($request->all());
 
         return $create;

@@ -1889,6 +1889,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'articles',
   props: {
@@ -1899,7 +1904,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      //    articles:[],
       article: {
         id: '',
         name: '',
@@ -1909,14 +1913,27 @@ __webpack_require__.r(__webpack_exports__);
       edit: false
     };
   },
-  // created(){
-  //     this.fetchArticles();
-  // },
   methods: {
-    // fetchArticles()
-    // {
-    //     axios.get('articles');
-    // },
+    onImageChange: function onImageChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      alert(files);
+      if (!files.length) return;
+      console.log(files[0]);
+      this.createImage(files[0]);
+    },
+    createImage: function createImage(file) {
+      var reader = new FileReader();
+      var vm = this.article;
+
+      reader.onload = function (e) {
+        vm.image = file.name;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    removeImage: function removeImage(e) {
+      this.article.image = '';
+    },
     deleteArticle: function deleteArticle(id) {
       if (confirm('Are you sure you want to delete?')) {
         fetch("delete-article/".concat(id)).then(function (res) {
@@ -1968,7 +1985,8 @@ __webpack_require__.r(__webpack_exports__);
       this.article.description = article.description;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {// console.log(this.articles);
+  }
 });
 
 /***/ }),
@@ -37429,7 +37447,20 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
-        _vm._m(0),
+        !_vm.article.image
+          ? _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                attrs: { type: "file" },
+                on: { change: _vm.onImageChange }
+              })
+            ])
+          : _c("div", { staticClass: "form-group" }, [
+              _c("img", { attrs: { src: "storage/" + _vm.article.image } }),
+              _vm._v(" "),
+              _c("button", { on: { click: _vm.removeImage } }, [
+                _vm._v("Remove image")
+              ])
+            ]),
         _vm._v(" "),
         _c(
           "button",
@@ -37444,7 +37475,7 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col" }, [
         _c("table", { staticClass: "table" }, [
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c(
             "tbody",
@@ -37493,21 +37524,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("img", {
-        attrs: { src: "'storage/'+article.image", width: "200", height: "200" }
-      }),
-      _vm._v(" "),
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "file", name: "image" }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
