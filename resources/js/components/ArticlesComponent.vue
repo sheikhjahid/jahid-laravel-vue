@@ -1,89 +1,84 @@
 <template>
     <div>
-
         <h1>Articles</h1>
 
-        <form @submit.prevent="addArticle()"  class="mb-2">
+        <form enctype="multipart/form-data" @submit.prevent="addArticle()"  class="mb-2">
             <div class="form-group">
                 <input class="form-control" placeholder="Name.." type="text" v-model="article.name">
             </div>
             <div class="form-group">
                 <textarea class="form-control" placeholder="Description.." v-model="article.description"></textarea>
             </div>
+            <div class="form-group">
+                <img src="'storage/'+article.image" width="200" height="200">
+                <input type="file" class="form-control" name="image">
+            </div>
             <button type="submit" class="btn btn-light btn-block">Submit</button>
         </form>
 
         <hr>
-        
-        <div class="card card-body mb-2" v-for="article in articles" v-bind:key="article.id">
-            <h3>{{ article.name }}</h3>
-            <p>{{ article.description }}</p>
-            <hr>
-            <button class="btn btn-warning mb-2" @click="editArticle(article)">Edit</button>
-            <button class="btn btn-danger" @click="deleteArticle(article.id)">Delete</button>
+
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Actions #</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="(article, index) in articles"
+                            :key="article.id" scope="row">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ article.name }}</td>
+                            <td>{{ article.description }}</td>
+                            <td>
+                                <button class="btn btn-warning" @click="editArticle(article)">Edit</button>
+                                <button class="btn btn-danger" @click="deleteArticle(article.id)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li v-bind:class="[{disabled:!pagination.prev_page_url}]" class="page-item">
-                    <a class="page-link" href="#" @click="fetchArticles(pagination.prev_page_url)">Previous</a>
-                </li>
-                
-                <li class="page-item disabled"><a class="page-link text-dark" href="#">
-                    Page {{pagination.current_page}} of {{pagination.last_page}}</a>
-                </li>
-
-                <li v-bind:class="[{disabled:!pagination.next_page_url}]" class="page-item">
-                    <a class="page-link" href="#" @click="fetchArticles(pagination.next_page_url)">Next</a>
-                </li>
-            </ul>
-        </nav>
-
     </div>
 </template>
 
 <script>
 
 export default{
+    name: 'articles',
+    props: {
+        articles:{
+            type:Array,
+            required:true
+        }
+    },
     data(){
        return {
-           articles: [],
+        //    articles:[],
            article:{
-               id:'',
-               name:'',
-               description:'',
-               image:''
-           },
-           article_id:'',
-           pagination:{},
-           edit:false
+                id:'',
+                name:'',
+                description:'',
+                image:''
+            },
+            edit:false
        }
     },
-    created(){
-        this.fetchArticles();
-    },
+    // created(){
+    //     this.fetchArticles();
+    // },
     methods: {
-        fetchArticles(page_url){
-            let vm = this;
-            page_url = page_url || 'articles';
-            fetch(page_url)
-            .then(res => res.json())
-            .then(res => {
-                this.articles = res.data;
-                vm.makePagination(res);
-            })
-            .catch(err => console.log(err))
-        },
-        makePagination(meta)
-        {
-            let pagination = {
-                current_page : meta.current_page,
-                last_page : meta.last_page,
-                next_page_url :meta.next_page_url,
-                previous_page_url : meta.prev_page_url
-            }
-            this.pagination = pagination;
-        },
+        // fetchArticles()
+        // {
+        //     axios.get('articles');
+        // },
         deleteArticle(id)
         {
             if(confirm('Are you sure you want to delete?'))
@@ -94,7 +89,7 @@ export default{
                     if(data==1)
                     {
                         alert('Article removed');
-                        this.fetchArticles();
+                        // this.fetchArticles();
                     }
                     else{
                         alert("Unable to delete article");
@@ -120,7 +115,7 @@ export default{
                     else{
                         alert('Article created');
                     } 
-                    this.fetchArticles();
+                    // this.fetchArticles();
                 })
                 .catch(err => console.log(err))
             }
@@ -138,7 +133,7 @@ export default{
                     {
                         alert('Article updated');
                     }
-                    this.fetchArticles();
+                    // this.fetchArticles();
                 })
                 .catch(err => console.log(err))
             }
@@ -151,6 +146,10 @@ export default{
             this.article.description = article.description;
 
         }
+    },
+
+    mounted() {
+        
     }
 }
 

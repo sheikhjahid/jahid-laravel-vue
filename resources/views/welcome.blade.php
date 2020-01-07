@@ -65,10 +65,10 @@
     </head>
     <body>
     <div id="app">
-        <navbar></navbar>
+        <!-- <navbar></navbar>
             <div class="container">
                 <articles></articles>
-            </div>
+            </div> -->
     </div>
         <!-- <div class="flex-center position-ref full-height">
             @if (Route::has('login'))

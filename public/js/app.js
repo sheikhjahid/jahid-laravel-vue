@@ -1882,59 +1882,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'articles',
+  props: {
+    articles: {
+      type: Array,
+      required: true
+    }
+  },
   data: function data() {
     return {
-      articles: [],
+      //    articles:[],
       article: {
         id: '',
         name: '',
         description: '',
         image: ''
       },
-      article_id: '',
-      pagination: {},
       edit: false
     };
   },
-  created: function created() {
-    this.fetchArticles();
-  },
+  // created(){
+  //     this.fetchArticles();
+  // },
   methods: {
-    fetchArticles: function fetchArticles(page_url) {
-      var _this = this;
-
-      var vm = this;
-      page_url = page_url || 'articles';
-      fetch(page_url).then(function (res) {
-        return res.json();
-      }).then(function (res) {
-        _this.articles = res.data;
-        vm.makePagination(res);
-      })["catch"](function (err) {
-        return console.log(err);
-      });
-    },
-    makePagination: function makePagination(meta) {
-      var pagination = {
-        current_page: meta.current_page,
-        last_page: meta.last_page,
-        next_page_url: meta.next_page_url,
-        previous_page_url: meta.prev_page_url
-      };
-      this.pagination = pagination;
-    },
+    // fetchArticles()
+    // {
+    //     axios.get('articles');
+    // },
     deleteArticle: function deleteArticle(id) {
-      var _this2 = this;
-
       if (confirm('Are you sure you want to delete?')) {
         fetch("delete-article/".concat(id)).then(function (res) {
           return res.json();
         }).then(function (data) {
           if (data == 1) {
-            alert('Article removed');
-
-            _this2.fetchArticles();
+            alert('Article removed'); // this.fetchArticles();
           } else {
             alert("Unable to delete article");
           }
@@ -1944,8 +1933,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addArticle: function addArticle() {
-      var _this3 = this;
-
       if (this.edit === false) {
         axios.post("create-article", this.article).then(function (res) {
           if (res.data.hasError == 1) {
@@ -1954,9 +1941,8 @@ __webpack_require__.r(__webpack_exports__);
             });
           } else {
             alert('Article created');
-          }
+          } // this.fetchArticles();
 
-          _this3.fetchArticles();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -1968,9 +1954,8 @@ __webpack_require__.r(__webpack_exports__);
             });
           } else {
             alert('Article updated');
-          }
+          } // this.fetchArticles();
 
-          _this3.fetchArticles();
         })["catch"](function (err) {
           return console.log(err);
         });
@@ -1982,7 +1967,8 @@ __webpack_require__.r(__webpack_exports__);
       this.article.name = article.name;
       this.article.description = article.description;
     }
-  }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -37379,193 +37365,168 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("Articles")]),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          staticClass: "mb-2",
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.addArticle()
-            }
+  return _c("div", [
+    _c("h1", [_vm._v("Articles")]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        staticClass: "mb-2",
+        attrs: { enctype: "multipart/form-data" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.addArticle()
           }
-        },
-        [
-          _c("div", { staticClass: "form-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.article.name,
-                  expression: "article.name"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { placeholder: "Name..", type: "text" },
-              domProps: { value: _vm.article.name },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.article, "name", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.article.description,
-                  expression: "article.description"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { placeholder: "Description.." },
-              domProps: { value: _vm.article.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.article, "description", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-light btn-block",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("Submit")]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _vm._l(_vm.articles, function(article) {
-        return _c(
-          "div",
-          { key: article.id, staticClass: "card card-body mb-2" },
-          [
-            _c("h3", [_vm._v(_vm._s(article.name))]),
-            _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(article.description))]),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _c(
-              "button",
+        }
+      },
+      [
+        _c("div", { staticClass: "form-group" }, [
+          _c("input", {
+            directives: [
               {
-                staticClass: "btn btn-warning mb-2",
-                on: {
-                  click: function($event) {
-                    return _vm.editArticle(article)
-                  }
+                name: "model",
+                rawName: "v-model",
+                value: _vm.article.name,
+                expression: "article.name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { placeholder: "Name..", type: "text" },
+            domProps: { value: _vm.article.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
                 }
-              },
-              [_vm._v("Edit")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
+                _vm.$set(_vm.article, "name", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("textarea", {
+            directives: [
               {
-                staticClass: "btn btn-danger",
-                on: {
-                  click: function($event) {
-                    return _vm.deleteArticle(article.id)
-                  }
+                name: "model",
+                rawName: "v-model",
+                value: _vm.article.description,
+                expression: "article.description"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { placeholder: "Description.." },
+            domProps: { value: _vm.article.description },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
                 }
-              },
-              [_vm._v("Delete")]
-            )
-          ]
+                _vm.$set(_vm.article, "description", $event.target.value)
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
+          [_vm._v("Submit")]
         )
-      }),
-      _vm._v(" "),
-      _c("nav", { attrs: { "aria-label": "Page navigation example" } }, [
-        _c("ul", { staticClass: "pagination" }, [
-          _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [{ disabled: !_vm.pagination.prev_page_url }]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      return _vm.fetchArticles(_vm.pagination.prev_page_url)
-                    }
-                  }
-                },
-                [_vm._v("Previous")]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("li", { staticClass: "page-item disabled" }, [
-            _c(
-              "a",
-              { staticClass: "page-link text-dark", attrs: { href: "#" } },
-              [
-                _vm._v(
-                  "\n                Page " +
-                    _vm._s(_vm.pagination.current_page) +
-                    " of " +
-                    _vm._s(_vm.pagination.last_page)
-                )
-              ]
-            )
-          ]),
+      ]
+    ),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col" }, [
+        _c("table", { staticClass: "table" }, [
+          _vm._m(1),
           _vm._v(" "),
           _c(
-            "li",
-            {
-              staticClass: "page-item",
-              class: [{ disabled: !_vm.pagination.next_page_url }]
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "page-link",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      return _vm.fetchArticles(_vm.pagination.next_page_url)
-                    }
-                  }
-                },
-                [_vm._v("Next")]
-              )
-            ]
+            "tbody",
+            _vm._l(_vm.articles, function(article, index) {
+              return _c("tr", { key: article.id, attrs: { scope: "row" } }, [
+                _c("td", [_vm._v(_vm._s(index + 1))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(article.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(article.description))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-warning",
+                      on: {
+                        click: function($event) {
+                          return _vm.editArticle(article)
+                        }
+                      }
+                    },
+                    [_vm._v("Edit")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteArticle(article.id)
+                        }
+                      }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              ])
+            }),
+            0
           )
         ])
       ])
-    ],
-    2
-  )
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("img", {
+        attrs: { src: "'storage/'+article.image", width: "200", height: "200" }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "file", name: "image" }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("#")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Description")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Actions #")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

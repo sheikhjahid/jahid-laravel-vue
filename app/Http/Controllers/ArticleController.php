@@ -16,9 +16,11 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $article = $this->article->paginate(3);
-
-        return $article;
+        $articles = collect($this->article->all());
+        
+        return view('articles.index',[
+            'articles' => $articles
+        ]);
     }
 
     public function create(Request $request)
@@ -34,7 +36,15 @@ class ArticleController extends Controller
                 'messages' => $validator->errors()
             ]);
         }
-        $request->image = "testimage.jpg";
+
+        return $request->all();
+        
+        if($request->file('image'))
+        {
+            $file = $request->file('image');
+
+            $request->image = $file->store('images');
+        }
         $create = $this->article->create($request->all());
 
         return $create;
