@@ -1838,6 +1838,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _helpers_ArticleForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers/ArticleForm */ "./resources/js/components/helpers/ArticleForm.vue");
 //
 //
 //
@@ -1875,6 +1876,79 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'articles',
+  components: {
+    ArticleForm: _helpers_ArticleForm__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    articles: {
+      type: Array,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      article: {
+        id: '',
+        name: '',
+        description: '',
+        image: ''
+      },
+      showForm: false,
+      edit: false
+    };
+  },
+  methods: {
+    showform: function showform() {
+      this.showForm = !this.showForm;
+    },
+    deleteArticle: function deleteArticle(id) {
+      if (confirm('Are you sure you want to delete?')) {
+        fetch("delete-article/".concat(id)).then(function (res) {
+          return res.json();
+        }).then(function (data) {
+          if (data == 1) {
+            alert('Article removed'); // this.fetchArticles();
+          } else {
+            alert("Unable to delete article");
+          }
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
+    },
+    editArticle: function editArticle(article) {
+      this.edit = true;
+      this.article.id = article.id;
+      this.article.name = article.name;
+      this.article.description = article.description;
+      this.article.image = article.image;
+    }
+  },
+  mounted: function mounted() {// console.log(this.articles);
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -1895,13 +1969,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'articles',
-  props: {
-    articles: {
-      type: Array,
-      required: true
-    }
-  },
+  name: 'ArticleForm',
   data: function data() {
     return {
       article: {
@@ -1909,16 +1977,13 @@ __webpack_require__.r(__webpack_exports__);
         name: '',
         description: '',
         image: ''
-      },
-      edit: false
+      }
     };
   },
   methods: {
     onImageChange: function onImageChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      alert(files);
+      var files = e.target.files;
       if (!files.length) return;
-      console.log(files[0]);
       this.createImage(files[0]);
     },
     createImage: function createImage(file) {
@@ -1926,7 +1991,7 @@ __webpack_require__.r(__webpack_exports__);
       var vm = this.article;
 
       reader.onload = function (e) {
-        vm.image = file.name;
+        vm.image = file;
       };
 
       reader.readAsDataURL(file);
@@ -1934,58 +1999,23 @@ __webpack_require__.r(__webpack_exports__);
     removeImage: function removeImage(e) {
       this.article.image = '';
     },
-    deleteArticle: function deleteArticle(id) {
-      if (confirm('Are you sure you want to delete?')) {
-        fetch("delete-article/".concat(id)).then(function (res) {
-          return res.json();
-        }).then(function (data) {
-          if (data == 1) {
-            alert('Article removed'); // this.fetchArticles();
-          } else {
-            alert("Unable to delete article");
-          }
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-      }
-    },
     addArticle: function addArticle() {
-      if (this.edit === false) {
-        axios.post("create-article", this.article).then(function (res) {
-          if (res.data.hasError == 1) {
-            $.each(res.data.messages, function (k, v) {
-              alert(v);
-            });
-          } else {
-            alert('Article created');
-          } // this.fetchArticles();
+      axios.post("create-article", this.article).then(function (res) {
+        if (res.data.hasError == 1) {
+          $.each(res.data.messages, function (k, v) {
+            alert(v);
+          });
+        } else {
+          alert('Article created');
+        } // this.fetchArticles();
 
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-      } else {
-        axios.put("update-article", this.article).then(function (res) {
-          if (res.data.hasError == 1) {
-            $.each(res.data.messages, function (k, v) {
-              alert(v);
-            });
-          } else {
-            alert('Article updated');
-          } // this.fetchArticles();
-
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-      }
+      })["catch"](function (err) {
+        return console.log(err);
+      });
     },
-    editArticle: function editArticle(article) {
-      this.edit = true;
-      this.article.id = article.id;
-      this.article.name = article.name;
-      this.article.description = article.description;
+    getArticle: function getArticle(article) {
+      console.log(article);
     }
-  },
-  mounted: function mounted() {// console.log(this.articles);
   }
 });
 
@@ -37387,88 +37417,25 @@ var render = function() {
     _c("h1", [_vm._v("Articles")]),
     _vm._v(" "),
     _c(
-      "form",
+      "button",
       {
-        staticClass: "mb-2",
-        attrs: { enctype: "multipart/form-data" },
+        staticClass: "btn btn-primary mb-2",
         on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.addArticle()
+          click: function($event) {
+            return _vm.showform()
           }
         }
       },
       [
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.article.name,
-                expression: "article.name"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { placeholder: "Name..", type: "text" },
-            domProps: { value: _vm.article.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.article, "name", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.article.description,
-                expression: "article.description"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { placeholder: "Description.." },
-            domProps: { value: _vm.article.description },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.article, "description", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        !_vm.article.image
-          ? _c("div", { staticClass: "form-group" }, [
-              _c("input", {
-                attrs: { type: "file" },
-                on: { change: _vm.onImageChange }
-              })
-            ])
-          : _c("div", { staticClass: "form-group" }, [
-              _c("img", { attrs: { src: "storage/" + _vm.article.image } }),
-              _vm._v(" "),
-              _c("button", { on: { click: _vm.removeImage } }, [
-                _vm._v("Remove image")
-              ])
-            ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
-          [_vm._v("Submit")]
+        _vm._v(
+          "\n            " +
+            _vm._s(!_vm.showForm ? "Add Article" : "Cancel") +
+            "\n        "
         )
       ]
     ),
+    _vm._v(" "),
+    _vm.showForm ? _c("div", [_c("ArticleForm")], 1) : _vm._e(),
     _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
@@ -37578,6 +37545,112 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      staticClass: "mb-2",
+      attrs: { enctype: "multipart/form-data" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.addArticle()
+        }
+      }
+    },
+    [
+      _c("div", { staticClass: "form-group" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.article.name,
+              expression: "article.name"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { placeholder: "Name..", type: "text" },
+          domProps: { value: _vm.article.name },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.article, "name", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.article.description,
+              expression: "article.description"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { placeholder: "Description.." },
+          domProps: { value: _vm.article.description },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.article, "description", $event.target.value)
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      !_vm.article.image
+        ? _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              attrs: { type: "file" },
+              on: { change: _vm.onImageChange }
+            })
+          ])
+        : _c("div", { staticClass: "form-group" }, [
+            _c("img", { attrs: { src: "storage/" + _vm.article.image } }),
+            _vm._v(" "),
+            _c("button", { on: { click: _vm.removeImage } }, [
+              _vm._v("Remove image")
+            ])
+          ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
+        [_vm._v("Submit")]
+      )
+    ]
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -49943,6 +50016,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_485090b2___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_485090b2___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers/ArticleForm.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/helpers/ArticleForm.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ArticleForm.vue?vue&type=template&id=9d4fc796& */ "./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796&");
+/* harmony import */ var _ArticleForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ArticleForm.vue?vue&type=script&lang=js& */ "./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _ArticleForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/helpers/ArticleForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ArticleForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./ArticleForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/helpers/ArticleForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ArticleForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./ArticleForm.vue?vue&type=template&id=9d4fc796& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/helpers/ArticleForm.vue?vue&type=template&id=9d4fc796&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ArticleForm_vue_vue_type_template_id_9d4fc796___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
