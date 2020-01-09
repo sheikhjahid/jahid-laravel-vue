@@ -20,6 +20,9 @@ Route::get('delete-article/{id}', 'ArticleController@delete');
 Route::post('create-article','ArticleController@create');
 Route::put('update-article','ArticleController@update');
 
+Route::get('users','UserController@index');
+Route::get('delete-user/{id}','UserController@delete');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

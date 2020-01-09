@@ -23,6 +23,7 @@ window.Vue = require('vue');
 Vue.component('login', require('./components/LoginComponent.vue').default);
 Vue.component('register', require('./components/RegisterComponent.vue').default);
 Vue.component('articles',require('./components/ArticlesComponent.vue').default);
+Vue.component('users',require('./components/UserComponent.vue').default);
 Vue.component('navbar', require('./components/NavbarComponent.vue').default);
 
 /**

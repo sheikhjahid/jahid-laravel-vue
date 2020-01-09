@@ -1,11 +1,5 @@
 <template>
     <div class="nav navbar bg-info">
-        <!-- <div class="navbar">
-            <a style="text-decoration:none;color:white;" href="articles">Articles</a>
-        </div>
-        <div class="navbar">
-            <a style="text-decoration:none;color:white;" href="users">Users</a>
-        </div> -->
         <div v-for="(tab) in navtabs"
                             :key="tab.name" class="navbar">
             <a style="text-decoration:none;color:white;" :href="tab.url">{{tab.name}}</a>
