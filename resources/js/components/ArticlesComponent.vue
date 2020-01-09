@@ -86,7 +86,7 @@ export default{
                     if(data==1)
                     {
                         alert('Article removed');
-                        // this.fetchArticles();
+                        
                     }
                     else{
                         alert("Unable to delete article");

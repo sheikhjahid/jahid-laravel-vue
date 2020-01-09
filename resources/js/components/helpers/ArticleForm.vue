@@ -76,9 +76,9 @@ export default{
                     else{
                         alert('Article created');
                     } 
-                        // this.fetchArticles();
+                    
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log(err))    
             }
             else{
                 
@@ -95,12 +95,8 @@ export default{
                         alert('Article Updated');
                     }
                 })
+                
             }
-            
-        },
-        getArticle(article)
-        {
-            console.log(article);
         }
     }
 }
