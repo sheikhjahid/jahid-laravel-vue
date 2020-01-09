@@ -13,7 +13,7 @@
 
 </template>
 <script>
-import RegisterForm from './helpers/RegisterForm.vue'
+import RegisterForm from './helpers/RegisterForm'
 export default{
     name:'Register',
     components:{
