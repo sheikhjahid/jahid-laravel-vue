@@ -1904,7 +1904,8 @@ __webpack_require__.r(__webpack_exports__);
         image: ''
       },
       showForm: false,
-      edit: false
+      edit: false,
+      getData: {}
     };
   },
   methods: {
@@ -1927,11 +1928,13 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     editArticle: function editArticle(article) {
-      this.edit = true;
-      this.article.id = article.id;
-      this.article.name = article.name;
-      this.article.description = article.description;
-      this.article.image = article.image;
+      this.getData = {
+        id: article.id,
+        name: article.name,
+        description: article.description,
+        image: article.image,
+        edit: true
+      };
     }
   },
   mounted: function mounted() {// console.log(this.articles);
@@ -1970,14 +1973,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ArticleForm',
+  props: {
+    articleData: {
+      type: Object,
+      required: true
+    }
+  },
   data: function data() {
-    return {
-      article: {
-        id: '',
-        name: '',
-        description: '',
-        image: ''
-      }
+    return {// article:{
+      //     id:'',
+      //     name:'',
+      //     description:'',
+      //     image:'',
+      // }
     };
   },
   methods: {
@@ -1987,31 +1995,42 @@ __webpack_require__.r(__webpack_exports__);
       this.createImage(files[0]);
     },
     createImage: function createImage(file) {
-      var reader = new FileReader();
-      var vm = this.article;
+      var reader = new FileReader(); // let vm = articleData;
 
       reader.onload = function (e) {
-        vm.image = file;
+        articleData.image = file;
       };
 
       reader.readAsDataURL(file);
     },
     removeImage: function removeImage(e) {
-      this.article.image = '';
+      articleData.image = '';
     },
-    addArticle: function addArticle() {
-      axios.post("create-article", this.article).then(function (res) {
-        if (res.data.hasError == 1) {
-          $.each(res.data.messages, function (k, v) {
-            alert(v);
-          });
-        } else {
-          alert('Article created');
-        } // this.fetchArticles();
+    addArticle: function addArticle(articleData) {
+      if (!articleData.edit) {
+        axios.post("create-article", articleData).then(function (res) {
+          if (res.data.hasError == 1) {
+            $.each(res.data.messages, function (k, v) {
+              alert(v);
+            });
+          } else {
+            alert('Article created');
+          } // this.fetchArticles();
 
-      })["catch"](function (err) {
-        return console.log(err);
-      });
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      } else {
+        axios.put('update-article', articleData).then(function (res) {
+          if (res.data.hasError == 1) {
+            $.each(res.data.messages, function (k, v) {
+              alert(v);
+            });
+          } else {
+            alert('Article Updated');
+          }
+        });
+      }
     },
     getArticle: function getArticle(article) {
       console.log(article);
@@ -37429,13 +37448,19 @@ var render = function() {
       [
         _vm._v(
           "\n            " +
-            _vm._s(!_vm.showForm ? "Add Article" : "Cancel") +
+            _vm._s(!_vm.showForm ? "Article Form" : "Cancel") +
             "\n        "
         )
       ]
     ),
     _vm._v(" "),
-    _vm.showForm ? _c("div", [_c("ArticleForm")], 1) : _vm._e(),
+    _vm.showForm
+      ? _c(
+          "div",
+          [_c("ArticleForm", { attrs: { articleData: this.getData } })],
+          1
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
@@ -37574,7 +37599,7 @@ var render = function() {
       on: {
         submit: function($event) {
           $event.preventDefault()
-          return _vm.addArticle()
+          return _vm.addArticle(_vm.articleData)
         }
       }
     },
@@ -37585,19 +37610,19 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.article.name,
-              expression: "article.name"
+              value: _vm.articleData.name,
+              expression: "articleData.name"
             }
           ],
           staticClass: "form-control",
           attrs: { placeholder: "Name..", type: "text" },
-          domProps: { value: _vm.article.name },
+          domProps: { value: _vm.articleData.name },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.article, "name", $event.target.value)
+              _vm.$set(_vm.articleData, "name", $event.target.value)
             }
           }
         })
@@ -37609,25 +37634,25 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.article.description,
-              expression: "article.description"
+              value: _vm.articleData.description,
+              expression: "articleData.description"
             }
           ],
           staticClass: "form-control",
           attrs: { placeholder: "Description.." },
-          domProps: { value: _vm.article.description },
+          domProps: { value: _vm.articleData.description },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.article, "description", $event.target.value)
+              _vm.$set(_vm.articleData, "description", $event.target.value)
             }
           }
         })
       ]),
       _vm._v(" "),
-      !_vm.article.image
+      !_vm.articleData.image
         ? _c("div", { staticClass: "form-group" }, [
             _c("input", {
               attrs: { type: "file" },
@@ -37635,7 +37660,7 @@ var render = function() {
             })
           ])
         : _c("div", { staticClass: "form-group" }, [
-            _c("img", { attrs: { src: "storage/" + _vm.article.image } }),
+            _c("img", { attrs: { src: "storage/" + _vm.articleData.image } }),
             _vm._v(" "),
             _c("button", { on: { click: _vm.removeImage } }, [
               _vm._v("Remove image")

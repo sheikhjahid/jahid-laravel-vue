@@ -3,11 +3,11 @@
         <h1>Articles</h1>
         
             <button class="btn btn-primary mb-2" @click="showform()">
-                {{ !showForm ? 'Add Article' : 'Cancel'}}
+                {{ !showForm ? 'Article Form' : 'Cancel'}}
             </button>
         
             <div v-if="showForm">
-                <ArticleForm></ArticleForm>
+                <ArticleForm :articleData="this.getData"></ArticleForm>
             </div>
         <hr>
 
@@ -48,7 +48,6 @@ import ArticleForm from './helpers/ArticleForm';
 
 export default{
     name: 'articles',
-
     components:{
         ArticleForm
     },
@@ -67,7 +66,8 @@ export default{
                 image:''
             },
             showForm:false,
-            edit:false
+            edit:false,
+            getData:{}
         }
     },
     methods: {
@@ -97,11 +97,13 @@ export default{
         },
         editArticle(article)
         {
-            this.edit = true;
-            this.article.id = article.id;
-            this.article.name = article.name;
-            this.article.description = article.description;
-            this.article.image = article.image;
+            this.getData = {
+                id:article.id,
+                name:article.name,
+                description:article.description,
+                image:article.image,
+                edit:true
+            };
         }
     },
 
