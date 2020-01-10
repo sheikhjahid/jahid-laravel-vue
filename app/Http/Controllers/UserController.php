@@ -22,7 +22,8 @@ class UserController extends Controller
 
     public function profile()
     {
-        return Auth::user();
+       $user = $this->user->with('articles')->where('id',Auth::user()->id)->first();
+       return view('users.profile')->with('user',$user);
     }
 
     public function delete($id)
