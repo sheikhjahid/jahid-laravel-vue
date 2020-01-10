@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Article;
 use Illuminate\Support\Facades\Validator;
+use Auth;
 class ArticleController extends Controller
 {
     protected $article;
@@ -16,7 +17,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = collect($this->article->all());
+        $articles = collect($this->article->where('user_id','!=',Auth::user()->id)->get());
         
         return view('articles.index',[
             'articles' => $articles

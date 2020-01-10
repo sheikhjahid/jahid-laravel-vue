@@ -2,13 +2,11 @@
     <div>
         <h1>Articles</h1>
         
-            <button class="btn btn-primary mb-2" @click="showform()">
-                {{ !showForm ? 'Article Form' : 'Cancel'}}
-            </button>
+        <div v-if="view">
+            <button class="btn btn-primary mb-2" v-on:click="close">Close</button>
+            <single-article :article="this.getData"></single-article>
+        </div>
         
-            <div v-if="showForm">
-                <ArticleForm :articleData="this.getData"></ArticleForm>
-            </div>
         <hr>
 
         <div class="row">
@@ -31,8 +29,7 @@
                             <td>{{ article.name }}</td>
                             <td>{{ article.description }}</td>
                             <td>
-                                <button class="btn btn-warning" @click="editArticle(article)">Edit</button>
-                                <button class="btn btn-danger" @click="deleteArticle(article.id)">Delete</button>
+                                <button class="btn btn-primary" v-on:click="viewArticle(article)">View</button>
                             </td>
                         </tr>
                     </tbody>
@@ -44,12 +41,12 @@
 
 <script>
 
-import ArticleForm from './helpers/ArticleForm';
+import SingleArticle from './helpers/SingleArticle';
 
 export default{
     name: 'articles',
     components:{
-        ArticleForm
+        'single-article':SingleArticle
     },
     props: {
         articles:{
@@ -65,50 +62,24 @@ export default{
                 description:'',
                 image:''
             },
-            showForm:false,
-            edit:false,
+            view:false,
             getData:{}
         }
     },
     methods: {
-
-        showform()
+        viewArticle(article)
         {
-            this.showForm = !this.showForm;
+            this.view = true;
+            this.getData = article;
         },
-        deleteArticle(id)
+        close()
         {
-            if(confirm('Are you sure you want to delete?'))
-            {
-                fetch(`delete-article/${id}`)
-                .then(res => res.json())
-                .then(data => {
-                    if(data==1)
-                    {
-                        alert('Article removed');
-                        
-                    }
-                    else{
-                        alert("Unable to delete article");
-                    }
-                })
-                .catch(err => console.log(err));
-            }
-        },
-        editArticle(article)
-        {
-            this.getData = {
-                id:article.id,
-                name:article.name,
-                description:article.description,
-                image:article.image,
-                edit:true
-            };
+            this.view = false;
         }
     },
 
     mounted() {
-        // console.log(this.articles);
+        console.log(this.articles);
     }
 }
 
