@@ -2064,6 +2064,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'profile',
@@ -2080,7 +2087,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       showForm: false,
       getData: {},
-      edit: false
+      edit: false,
+      selected: {}
     };
   },
   methods: {
@@ -2286,6 +2294,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'ArticleForm',
   props: {
@@ -2296,7 +2307,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      auth: {}
+      auth: {},
+      errors: {},
+      message: ''
     };
   },
   created: function created() {
@@ -2327,6 +2340,8 @@ __webpack_require__.r(__webpack_exports__);
       articleData.image = '';
     },
     addArticle: function addArticle(articleData) {
+      var _this2 = this;
+
       articleData.user_id = this.auth.id;
 
       if (!articleData.edit) {
@@ -2336,7 +2351,7 @@ __webpack_require__.r(__webpack_exports__);
               alert(v);
             });
           } else {
-            alert('Article created');
+            _this2.message = "Aricle Created";
           }
         })["catch"](function (err) {
           return console.log(err);
@@ -2348,7 +2363,7 @@ __webpack_require__.r(__webpack_exports__);
               alert(v);
             });
           } else {
-            alert('Article Updated');
+            _this2.message = "Article Updated";
           }
         });
       }
@@ -38240,7 +38255,53 @@ var render = function() {
           )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c("pre", [_vm._v(_vm._s(_vm.selected))]),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selected,
+            expression: "selected"
+          }
+        ],
+        staticClass: "form-control",
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.selected = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { disabled: "" } }, [
+          _vm._v("Select Product...")
+        ]),
+        _vm._v(" "),
+        _vm._l(_vm.user.articles, function(article) {
+          return _c(
+            "option",
+            { key: article.id, domProps: { value: article.id } },
+            [_vm._v(_vm._s(article.name))]
+          )
+        })
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -38454,6 +38515,14 @@ var render = function() {
       }
     },
     [
+      _vm.message
+        ? _c("div", [
+            _c("div", { staticClass: "alert alert-success" }, [
+              _vm._v(_vm._s(_vm.message))
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c("input", {
           directives: [

@@ -45,7 +45,14 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
+        <pre>{{ selected }}</pre>
+        <select v-model="selected" class="form-control">
+                        <option disabled>Select Product...</option>
+                        <option v-for="article in user.articles" :key="article.id" :value="article.id">{{ article.name }}</option>
+                    </select>
+
    </div>
 </template>
 
@@ -67,7 +74,8 @@ export default{
         return {
             showForm:false,
             getData:{},
-            edit:false
+            edit:false,
+            selected:{}
         }
     },
     methods:{

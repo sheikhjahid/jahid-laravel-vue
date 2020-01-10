@@ -1,6 +1,9 @@
 <template>
     <form enctype="multipart/form-data" @submit.prevent="addArticle(articleData)"  class="mb-2">
             
+            <div v-if="message">
+                <div class="alert alert-success">{{message}}</div>
+            </div> 
             <div class="form-group">
                 <input class="form-control" placeholder="Name.." type="text" v-model="articleData.name">
             </div>
@@ -29,7 +32,9 @@ export default{
     },
     data(){
        return  {
-            auth:{}
+            auth:{},
+            errors:{},
+            message:''
         }
     },
     created(){
@@ -77,7 +82,7 @@ export default{
                         });
                     }
                     else{
-                        alert('Article created');
+                        this.message="Aricle Created";
                     } 
                     
                 })
@@ -95,7 +100,7 @@ export default{
                         })
                     }
                     else{
-                        alert('Article Updated');
+                       this.message="Article Updated";
                     }
                 })
                 
