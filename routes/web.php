@@ -1,5 +1,5 @@
 <?php
-
+use Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,13 +15,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('articles', 'ArticleController@index');
-Route::get('delete-article/{id}', 'ArticleController@delete');
-Route::post('create-article','ArticleController@create');
-Route::put('update-article','ArticleController@update');
+Route::group(['middleware' => 'auth'], function(){
 
-Route::get('users','UserController@index');
-Route::get('delete-user/{id}','UserController@delete');
+    Route::get('user', function(){
+        return response()->json(Auth::user());
+    });
+    Route::get('articles', 'ArticleController@index');
+    Route::get('delete-article/{id}', 'ArticleController@delete');
+    Route::post('create-article','ArticleController@create');
+    Route::put('update-article','ArticleController@update');
+    
+    Route::get('profile','UserController@profile')->name('profile');
+    Route::get('users','UserController@index');
+    Route::get('delete-user/{id}','UserController@delete');
+});
+
 
 Auth::routes();
 

@@ -42,7 +42,7 @@ class ArticleController extends Controller
 
             $request->image = $file->store('images');
         }
-        // return $request->image;
+       
         $create = $this->article->create($request->all());
 
         return $create;

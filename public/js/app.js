@@ -2114,6 +2114,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'users',
   props: {
@@ -2128,10 +2140,24 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         name: '',
         email: ''
-      }
+      },
+      view: false,
+      getData: {}
     };
   },
-  methods: {},
+  methods: {
+    viewUser: function viewUser(user) {
+      this.view = true;
+      this.getData = {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      };
+    },
+    close: function close() {
+      this.view = false;
+    }
+  },
   mounted: function mounted() {
     console.log(this.users);
   }
@@ -2176,13 +2202,18 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   data: function data() {
-    return {// article:{
-      //     id:'',
-      //     name:'',
-      //     description:'',
-      //     image:'',
-      // }
+    return {
+      auth: {}
     };
+  },
+  created: function created() {
+    var _this = this;
+
+    axios.get("user").then(function (res) {
+      _this.auth = res.data;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
   },
   methods: {
     onImageChange: function onImageChange(e) {
@@ -2203,6 +2234,8 @@ __webpack_require__.r(__webpack_exports__);
       articleData.image = '';
     },
     addArticle: function addArticle(articleData) {
+      articleData.user_id = this.auth.id;
+
       if (!articleData.edit) {
         axios.post("create-article", articleData).then(function (res) {
           if (res.data.hasError == 1) {
@@ -38056,6 +38089,32 @@ var render = function() {
   return _c("div", [
     _c("h1", [_vm._v("Users")]),
     _vm._v(" "),
+    _vm.view
+      ? _c("div", { staticClass: "mb-2" }, [
+          _c("h3", [_vm._v("User Details")]),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", on: { click: _vm.close } },
+            [_vm._v("Close")]
+          ),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c("div", { staticClass: "user-name" }, [
+            _c("label", { staticClass: "label label-success" }, [
+              _vm._v("User : " + _vm._s(_vm.getData.name))
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "user-email" }, [
+            _c("label", { staticClass: "label label-success" }, [
+              _vm._v("Email : " + _vm._s(_vm.getData.email))
+            ])
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
@@ -38074,9 +38133,18 @@ var render = function() {
                 _c("td", [_vm._v(_vm._s(user.email))]),
                 _vm._v(" "),
                 _c("td", [
-                  _c("button", { staticClass: "btn btn-warning" }, [
-                    _vm._v("View")
-                  ]),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-warning",
+                      on: {
+                        click: function($event) {
+                          return _vm.viewUser(user)
+                        }
+                      }
+                    },
+                    [_vm._v("View")]
+                  ),
                   _vm._v(" "),
                   _c("a", { attrs: { href: "delete-user/" + user.id } }, [
                     _c("button", { staticClass: "btn btn-danger" }, [

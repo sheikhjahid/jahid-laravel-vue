@@ -1,6 +1,6 @@
 <template>
     <form enctype="multipart/form-data" @submit.prevent="addArticle(articleData)"  class="mb-2">
-            <!-- <pre>{{articleData}}</pre> -->
+            
             <div class="form-group">
                 <input class="form-control" placeholder="Name.." type="text" v-model="articleData.name">
             </div>
@@ -29,15 +29,18 @@ export default{
     },
     data(){
        return  {
-            // article:{
-            //     id:'',
-            //     name:'',
-            //     description:'',
-            //     image:'',
-            // }
+            auth:{}
         }
     },
+    created(){
+        axios.get(`user`)
+            .then(res => {
+                this.auth = res.data;
+            })
+            .catch(err => console.log(err))
+    },
     methods:{
+       
         onImageChange(e) {
             let files = e.target.files;
             if (!files.length)
@@ -60,7 +63,7 @@ export default{
         },
         addArticle(articleData)
         {
-           
+            articleData.user_id = this.auth.id;
             if(!articleData.edit)
             {
                 axios.post(`create-article`,articleData)

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-
+use Auth;
 class UserController extends Controller
 {
     protected $user;
@@ -15,14 +15,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = $this->user->all();
+        $users = $this->user->where('id','!=',Auth::user()->id)->get();
 
         return view('users.index')->with('users',$users);
     }
 
-    public function view($id)
+    public function profile()
     {
-
+        return Auth::user();
     }
 
     public function delete($id)
