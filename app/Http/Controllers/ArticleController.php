@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Article;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use Share;
 class ArticleController extends Controller
 {
     protected $article;
@@ -15,13 +16,19 @@ class ArticleController extends Controller
         $this->article = $article;
     }
 
+    public function getArticles()
+    {
+        $data = array();
+        $data = $this->article->paginate(2);
+
+        return response()->json($data);
+    }
+
     public function index()
     {
-        $articles = collect($this->article->where('user_id','!=',Auth::user()->id)->get());
-        
-        return view('articles.index',[
-            'articles' => $articles
-        ]);
+        // $articles = collect($this->article->where('user_id','!=',Auth::user()->id)->get());
+
+        return view('articles.index');
     }
 
     public function create(Request $request)

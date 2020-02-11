@@ -4,7 +4,7 @@
 
  <navbar></navbar>
  <div class="container">
-    <articles :articles="{{ $articles }}"></articles>
+    <articles></articles>
 </div>
 
 @endsection

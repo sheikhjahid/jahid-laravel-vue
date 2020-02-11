@@ -28,6 +28,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('profile','UserController@profile')->name('profile');
     Route::get('users','UserController@index');
     Route::get('delete-user/{id}','UserController@delete');
+
+    Route::get('get-articles','ArticleController@getArticles');
 });
 
 

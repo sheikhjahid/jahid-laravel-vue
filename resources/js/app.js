@@ -27,6 +27,10 @@ Vue.component('users',require('./components/UserComponent.vue').default);
 Vue.component('profile', require('./components/ProfileComponent.vue').default);
 Vue.component('navbar', require('./components/NavbarComponent.vue').default);
 
+Vue.use(require('vue-resource'));
+
+Vue.use(require('vue-social-sharing'));
+Vue.component('pagination', require('laravel-vue-pagination'));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
